@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from transformers import AutoTokenizer, PreTrainedTokenizerBase
 
 from ingestion.loaders import RawDocument
-
+from app.config import get_settings
 
 class ChunkResult(BaseModel):
     """Intermediate representation of a chunk before embedding and DB persistence."""
@@ -18,7 +18,9 @@ class ChunkResult(BaseModel):
 
 # Cache tokenizers to avoid re-loading them for every document chunking operation. 
 @lru_cache(maxsize=1)
-def _get_tokenizer(model_name: str) -> PreTrainedTokenizerBase:
+def _get_tokenizer() -> PreTrainedTokenizerBase:
+    settings = get_settings()
+    model_name = settings.embedding_model_name
     return AutoTokenizer.from_pretrained(model_name)
 
 
@@ -26,12 +28,11 @@ def chunk_document(
     doc: RawDocument, # the raw document to be chunked
     chunk_size: int, # the maximum number of tokens in each chunk
     chunk_overlap: int, # the number of tokens that overlap between consecutive chunks, must be less than chunk_size
-    model_name: str, # the name of the model whose tokenizer should be used, e.g. "google/embeddinggemma-300m"
 ) -> list[ChunkResult]:
     if chunk_overlap >= chunk_size:
         raise ValueError(f"chunk_overlap ({chunk_overlap}) must be less than chunk_size ({chunk_size})")
 
-    tokenizer = _get_tokenizer(model_name)
+    tokenizer = _get_tokenizer()
     
     # Tokenize the document, token_ids is a list of integers representing the tokenized input text. 
     # E.g., the text "Hello world!" might be tokenized into [15496, 995], where 15496 is the token ID for "Hello" and 995 is the token ID for "world".
