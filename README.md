@@ -140,36 +140,44 @@ loom/
 
 ## Getting started
 
-**Prerequisites:** Python 3.11+, Docker, an Anthropic API key. GCP project only needed for deployment (Phase 5).
+**Prerequisites:** Python 3.11+, Docker (Desktop or daemon), an Anthropic API key.  
+GCP project only needed for deployment (Phase 5).
 
 ```bash
 # 1. Clone & install
-git clone <repo-url> loom && cd loom
-pip install -r requirements.txt   # or: poetry install
+git clone <repo-url> loom && cd loom/app
+uv sync
 
-# 2. Local Postgres with pgvector
-docker compose up -d
-
-# 3. Configure environment
+# 2. Configure environment
 cp .env.example .env
-# fill in: DATABASE_URL, ANTHROPIC_API_KEY, EMBEDDING_MODEL
+# fill in: POSTGRES_PASSWORD, ANTHROPIC_API_KEY
+# DATABASE_URL is pre-filled to match the docker-compose defaults
+
+# 3. Start Postgres
+make db-up
 
 # 4. Run migrations
-alembic upgrade head
+make migrate
 
-# 5. Seed a sample corpus
-python scripts/seed_corpus.py
+# 5. Start the API
+make dev
 
-# 6. Run the API
-uvicorn app.main:app --reload
-
-# 7. Try a query
+# 6. Try a query
 curl -X POST localhost:8000/query -H "Content-Type: application/json" \
   -d '{"question": "..."}'
-
-# 8. Run the eval harness
-python -m app.eval.run_eval
 ```
+
+### Make targets
+
+| Command | What it does |
+|---|---|
+| `make db-up` | Start Postgres in the background |
+| `make db-down` | Stop and remove the container |
+| `make db-logs` | Tail Postgres logs |
+| `make migrate` | Run all pending Alembic migrations |
+| `make migrate-down` | Roll back one migration |
+| `make test` | Run the test suite |
+| `make dev` | Start the FastAPI dev server with live reload |
 
 ## Build plan & ticket tracking
 
@@ -177,7 +185,7 @@ Work is broken into tickets, tracked as GitHub Issues in this repo, titled `[GRA
 
 | Phase | Tickets | Unlocks |
 |---|---|---|
-| 0 — Foundations | GRAG-1, GRAG-2 | Repo scaffolding, DB schema/migrations |
+| 0 — Foundations | ~~GRAG-1~~, ~~GRAG-2~~ ✓ | Repo scaffolding, DB schema/migrations |
 | 1 — Ingestion & vector pipeline | GRAG-3 → GRAG-7 | Documents in, chunked, embedded, vector-searchable |
 | 2 — Knowledge graph extraction | GRAG-8 → GRAG-13 | Entities/relationships extracted, stored, traversable |
 | 3 — Retrieval & generation | GRAG-14 → GRAG-16 | Hybrid retrieval, agent loop, answer generation |
