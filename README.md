@@ -85,7 +85,7 @@ No single chunk is semantically close to that question — the answer is assembl
 |---|---|---|
 | Storage | Postgres + pgvector, single instance | One database to operate, not two. |
 | Graph engine | NetworkX, in-memory, hydrated from Postgres tables | Fits comfortably in memory at this scale; no Neo4j ops overhead. See FAQ. |
-| Embeddings | Local — `sentence-transformers`, `BAAI/bge-small-en-v1.5` | Free, no rate limits, good enough at this scale. API budget goes to reasoning, not embeddings. |
+| Embeddings | Local — `sentence-transformers`, `google/embeddinggemma-300m` | Free, no rate limits, good enough at this scale. API budget goes to reasoning, not embeddings. |
 | Extraction LLM | Claude, Haiku-tier, tool-use for structured output | Cheap/fast model for a high-volume, low-reasoning task. |
 | Generation / agent LLM | Claude, Sonnet-tier, tool-use | Higher reasoning quality where it actually matters. |
 | Orchestration | Hand-rolled ReAct loop (no LangGraph/LlamaIndex) | We're demonstrating that we can build control flow, not just call a framework. |
