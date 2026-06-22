@@ -1,2 +1,13 @@
 PRIVATE_README.md
-app/.env
+.env
+__pycache__/*
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+node_modules/
+.venv/
+.claude/
+.DS_Store
