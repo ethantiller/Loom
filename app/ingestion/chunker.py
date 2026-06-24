@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from transformers import AutoTokenizer, PreTrainedTokenizerBase
 
-from ingestion.loaders import RawDocument
+from app.ingestion.loaders import RawDocument
 from app.config import get_settings
 
 class ChunkResult(BaseModel):
