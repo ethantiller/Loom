@@ -9,7 +9,7 @@ from app.config import get_settings
 from app.db.models import Chunk as ChunkRow, Document as DocumentRow
 from app.ingestion.chunker import chunk_document
 from app.ingestion.embedder import embed
-from app.ingestion.loaders import load_document
+from app.ingestion.loaders import RawDocument, load_one
 
 
 class IngestionPipeline:
@@ -30,7 +30,7 @@ class IngestionPipeline:
             if existing:
                 continue
 
-            raw_doc = load_document(path, raw_bytes)
+            raw_doc: RawDocument = load_one(path)
             if raw_doc is None:
                 continue
 

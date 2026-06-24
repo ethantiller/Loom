@@ -1,6 +1,6 @@
 PRIVATE_README.md
 .env
-__pycache__/*
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -11,3 +11,4 @@ node_modules/
 .venv/
 .claude/
 .DS_Store
+*.pdf
