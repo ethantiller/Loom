@@ -86,8 +86,8 @@ No single chunk is semantically close to that question — the answer is assembl
 | Storage | Postgres + pgvector, single instance | One database to operate, not two. |
 | Graph engine | NetworkX, in-memory, hydrated from Postgres tables | Fits comfortably in memory at this scale; no Neo4j ops overhead. See FAQ. |
 | Embeddings | Local — `sentence-transformers`, `google/embeddinggemma-300m` | Free, no rate limits, good enough at this scale. API budget goes to reasoning, not embeddings. |
-| Extraction LLM | Claude, Haiku-tier, tool-use for structured output | Cheap/fast model for a high-volume, low-reasoning task. |
-| Generation / agent LLM | Claude, Sonnet-tier, tool-use | Higher reasoning quality where it actually matters. |
+| Extraction LLM | Gemini, Flash-tier, function-calling for structured output | Cheap/fast model for a high-volume, low-reasoning task. |
+| Generation / agent LLM | Gemini, Pro-tier, function-calling | Higher reasoning quality where it actually matters. |
 | Orchestration | Hand-rolled ReAct loop (no LangGraph/LlamaIndex) | We're demonstrating that we can build control flow, not just call a framework. |
 | Serving | FastAPI + Uvicorn | — |
 | Deployment | Cloud Run (API) + Cloud SQL Postgres (with `vector` extension) | No AlloyDB/Neo4j footprint for a demo-scale graph. |
@@ -140,7 +140,7 @@ loom/
 
 ## Getting started
 
-**Prerequisites:** Python 3.11+, Docker (Desktop or daemon), an Anthropic API key.  
+**Prerequisites:** Python 3.11+, Docker (Desktop or daemon), a Gemini API key.  
 GCP project only needed for deployment (Phase 5).
 
 ```bash
@@ -150,7 +150,7 @@ uv sync
 
 # 2. Configure environment
 cp .env.example .env
-# fill in: POSTGRES_PASSWORD, ANTHROPIC_API_KEY
+# fill in: POSTGRES_PASSWORD, GEMINI_API_KEY
 # DATABASE_URL is pre-filled to match the docker-compose defaults
 
 # 3. Start Postgres
@@ -215,8 +215,11 @@ Open models (bge-small) are competitive at this scale, free, and don't rate-limi
 **Why a hand-rolled ReAct loop instead of LangGraph or LlamaIndex?**
 Building the control flow ourselves is the stronger signal for the "agentic AI" part of this project. It costs roughly a day more than wiring up a framework — that's the trade we're making on purpose.
 
-**Why Haiku for extraction but Sonnet for generation/the agent?**
+**Why Gemini Flash for extraction but Pro for generation/the agent?**
 Extraction is high-volume and low-reasoning (pull triples out of a chunk) — a cheap, fast model is fine. Generation and the agent's step-by-step decisions need more reasoning quality, so they get the better model.
+
+**Why Gemini instead of Claude?**
+The project started on Claude; the extraction and generation stages hadn't been built yet when the switch happened, so there was no code to migrate — just config, docs, and the dependency list.
 
 **Why fixed-size chunking instead of semantic chunking?**
 Fixed-size with overlap (~300–500 tokens, ~15% overlap) is simple and fast to ship. Semantic/recursive chunking is a real improvement but it's an optimization — see GRAG-26 if there's time left.

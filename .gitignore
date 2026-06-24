@@ -9,6 +9,5 @@ __pycache__/
 *.db
 node_modules/
 .venv/
-.claude/
 .DS_Store
 *.pdf
