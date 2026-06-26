@@ -8,7 +8,7 @@ ENV_FILE = Path(__file__).resolve().with_name(".env")
 
 class Settings(BaseSettings):
     database_url: str
-    anthropic_api_key: str
+    gemini_api_key: str
     embedding_model_name: str = "google/embeddinggemma-300m"
     chunk_size: int = 512
     chunk_overlap: int = 50
