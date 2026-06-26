@@ -1,0 +1,20 @@
+{
+  "chunk_text": "In 1969, NASA launched Apollo 11, a mission that sent astronaut Neil Armstrong to the Moon. The mission advanced the field of space exploration. Apollo 11 used the Saturn V rocket, which was built by Boeing.",
+  "expected_result": {
+    "entities": [
+      {"name": "NASA", "type": "ORG"},
+      {"name": "Apollo 11", "type": "EVENT"},
+      {"name": "Neil Armstrong", "type": "PERSON"},
+      {"name": "space exploration", "type": "CONCEPT"},
+      {"name": "Saturn V", "type": "PRODUCT"},
+      {"name": "Boeing", "type": "ORG"}
+    ],
+    "relationships": [
+      {"source": "NASA", "target": "Apollo 11", "relation": "launched"},
+      {"source": "Apollo 11", "target": "Neil Armstrong", "relation": "sent"},
+      {"source": "Apollo 11", "target": "space exploration", "relation": "advanced"},
+      {"source": "Apollo 11", "target": "Saturn V", "relation": "used"},
+      {"source": "Saturn V", "target": "Boeing", "relation": "built_by"}
+    ]
+  }
+}
