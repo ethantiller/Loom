@@ -9,7 +9,7 @@ import pytest
 from uuid import uuid4
 from sqlalchemy import text
 
-from app.db.models import Chunk as ChunkRow, Document as DocumentRow
+from app.extraction.db.models import Chunk as ChunkRow, Document as DocumentRow
 from app.retrieval.vector_search import similarity_search
 
 

@@ -2,7 +2,7 @@ import numpy as np
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import Chunk
+from app.extraction.db.models import Chunk
 
 
 def similarity_search(session: Session, query_embedding: np.ndarray, k: int = 5) -> list[Chunk]:
