@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
-from app.db.models import Chunk as ChunkRow, Document as DocumentRow
+from app.extraction.db.models import Chunk as ChunkRow, Document as DocumentRow
 from app.ingestion.chunker import chunk_document
 from app.ingestion.embedder import embed
 from app.ingestion.loaders import RawDocument, load_one
