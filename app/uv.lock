@@ -715,7 +715,7 @@ dev = [
 requires-dist = [
     { name = "alembic", specifier = ">=1.13" },
     { name = "fastapi", specifier = ">=0.111" },
-    { name = "google-genai", specifier = ">=1.0" },
+    { name = "google-genai", specifier = "==2.10.0" },
     { name = "networkx", specifier = ">=3.3" },
     { name = "pdfplumber", specifier = ">=0.11" },
     { name = "pgvector", specifier = ">=0.3" },

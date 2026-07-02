@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 from sqlalchemy import select
 
-from app.db.models import Chunk as ChunkRow, Document as DocumentRow
+from app.extraction.db.models import Chunk as ChunkRow, Document as DocumentRow
 from app.ingestion.chunker import ChunkResult
 from app.ingestion.pipeline import IngestionPipeline
 

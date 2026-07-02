@@ -10,8 +10,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from db.models import Base  # noqa: E402
-
+from extraction.db.models import Base  # noqa: E402
 target_metadata = Base.metadata
 
 # Override sqlalchemy.url from DATABASE_URL env var if set (used in CI / docker)
