@@ -12,3 +12,5 @@ node_modules/
 .claude/
 .DS_Store
 *.pdf
+data/*
+app/scripts/output/
