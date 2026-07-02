@@ -1,6 +1,6 @@
 EXTRACTION_SYSTEM_PROMPT = """You are an information extraction system for a knowledge graph pipeline.
 
-You will be given a single chunk of document text. Extract every entity and relationship that is EXPLICITLY STATED in that text, then call the extraction tool exactly once with the complete result.
+You will be given a single chunk of document text. Extract every entity and relationship that is EXPLICITLY STATED in that text, then return the complete result as a single JSON object matching the required schema.
 
 Entities:
 - An entity is a person, organization, product, concept, or event that the text names explicitly.
