@@ -25,18 +25,31 @@ class EntityExtractor:
         self._client = client or genai.Client(api_key=get_settings().gemini_api_key)
         self._model = model
 
+    @property
+    def client(self) -> genai.Client:
+        return self._client
+
+    @property
+    def model(self) -> str:
+        return self._model
+
+    def generation_config(self) -> genai_types.GenerateContentConfig:
+        return genai_types.GenerateContentConfig(
+            system_instruction=EXTRACTION_SYSTEM_PROMPT,
+            response_mime_type="application/json",
+            response_schema=ExtractionResult,
+        )
+
+    def parse_response(self, chunk_id: Any, response: Any) -> ExtractionResult:
+        result = response.parsed
+        if not isinstance(result, ExtractionResult):
+            raise ExtractionError(chunk_id, response)
+        return result
+
     def extract(self, chunk: Chunk) -> ExtractionResult:
         response = self._client.models.generate_content(
             model=self._model,
             contents=chunk.text,
-            config=genai_types.GenerateContentConfig(
-                system_instruction=EXTRACTION_SYSTEM_PROMPT,
-                response_mime_type="application/json",
-                response_schema=ExtractionResult,
-            ),
+            config=self.generation_config(),
         )
-
-        result = response.parsed
-        if not isinstance(result, ExtractionResult):
-            raise ExtractionError(chunk.id, response)
-        return result
+        return self.parse_response(chunk.id, response)
