@@ -1,0 +1,24 @@
+appId: io.github.rbfraphael.electron-next
+productName: Electron Next.JS
+copyright: Copyright (c) 2026 RBFraphael
+directories:
+  output: dist
+files:
+  - main/**/*
+  - out/**/*
+  - package.json
+win:
+  target:
+    - dir
+    - portable
+    - zip
+linux:
+  target:
+    - dir
+    - AppImage
+    - zip
+mac:
+  target:
+    - dir
+    - dmg
+    - zip

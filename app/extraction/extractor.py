@@ -22,7 +22,13 @@ class ExtractionError(Exception):
 
 class EntityExtractor:
     def __init__(self, client: genai.Client | None = None, model: str = EXTRACTION_MODEL):
-        self._client = client or genai.Client(api_key=get_settings().gemini_api_key)
+        if client is not None:
+            self._client = client
+        else:
+            api_key = get_settings().gemini_api_key
+            if not api_key:
+                raise ValueError("GEMINI_API_KEY is required to run entity extraction")
+            self._client = genai.Client(api_key=api_key)
         self._model = model
 
     @property

@@ -19,4 +19,4 @@ test:
 	uv run python -m pytest
 
 dev:
-	uv run uvicorn app.main:app --reload
+	uv sync && PYTHONPATH=.. uv run uvicorn app.main:app --reload
