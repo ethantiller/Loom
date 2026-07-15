@@ -4,11 +4,19 @@ import { useState } from "react";
 
 import MessageComposer from "../components/MessageComposer";
 
-export default function ChatPage() {
-  const [messages, setMessages] = useState<string[]>([]);
+type ChatMessage = {
+  id: string;
+  text: string;
+};
 
-  function handleSendMessage(message: string): void {
-    setMessages((prevMessages) => [...prevMessages, message]);
+export default function ChatPage() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  function handleSendMessage(text: string): void {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { id: crypto.randomUUID(), text },
+    ]);
   }
 
   return (
@@ -16,12 +24,12 @@ export default function ChatPage() {
       {/* Message history area. Content sticks to the bottom and grows upward. */}
       <div className="flex flex-1 flex-col overflow-y-auto">
         <div className="mx-auto mt-auto flex w-full max-w-3xl flex-col gap-3 px-4 py-6">
-          {messages.map((message, index) => (
+          {messages.map((message) => (
             <div
-              key={index}
+              key={message.id}
               className="self-end whitespace-pre-wrap rounded-2xl bg-zinc-700 px-4 py-2 text-sm text-zinc-100"
             >
-              {message}
+              {message.text}
             </div>
           ))}
         </div>
