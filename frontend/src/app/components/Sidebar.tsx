@@ -1,38 +1,57 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 type NavItem = {
   label: string;
+  href: string;
   icon: React.ReactNode;
 };
+
+const SidebarLogo = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M9 4v16" />
+  </svg>
+)
+
+const HomeLogo = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+    <path d="M3 10.5 12 3l9 7.5" />
+    <path d="M5 9.5V21h14V9.5" />
+    <path d="M9.5 21v-6h5v6" />
+  </svg>
+)
+
+const ChatLogo = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+    <path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z" />
+  </svg>
+)
+
+const ProjectLogo = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+    <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+  </svg>
+)
 
 const navItems: NavItem[] = [
   {
     label: "Home",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-        <path d="M3 10.5 12 3l9 7.5" />
-        <path d="M5 9.5V21h14V9.5" />
-        <path d="M9.5 21v-6h5v6" />
-      </svg>
-    ),
+    href: "/",
+    icon: <HomeLogo />
   },
   {
     label: "Chat",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-        <path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z" />
-      </svg>
-    ),
+    href: "/chat",
+    icon: <ChatLogo />
   },
   {
     label: "Projects",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-        <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-      </svg>
-    ),
+    href: "/projects",
+    icon: <ProjectLogo />
   },
 ];
 
@@ -46,18 +65,29 @@ const chats: string[] = [
   "Book recommendations",
 ];
 
+/** Returns true when the current route should light up the given nav item. */
+function isNavItemActive(pathname: string, href: string): boolean {
+  if (href === "/") {
+    return pathname === "/";
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export default function Sidebar() {
-  const [active, setActive] = useState<string>("Home");
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   function handleOpenClose(): void {
-    setIsOpen(!isOpen);
+    setIsOpen((open) => !open);
   }
 
-  const sidebarWidth: string = isOpen ? "w-60" : "w-16";
+  const sidebarWidth: string = isOpen ? "w-60" : "w-23";
 
   return (
-    <div className={`flex ${sidebarWidth} shrink-0 flex-col overflow-hidden whitespace-nowrap border-r border-zinc-700/60 bg-zinc-900 transition-[width] duration-200 ease-in-out`}>
+    <div className={`flex ${sidebarWidth} rounded-r-4xl shrink-0 flex-col overflow-hidden whitespace-nowrap border-r border-zinc-700/60 bg-zinc-900 transition-[width] duration-200 ease-in-out`}>
+      {/* Draggable strip that clears the macOS traffic-light buttons */}
+      <div className="drag-region h-10 shrink-0" />
+
       {/* Toggle */}
       <div className={`flex items-center py-4 ${isOpen ? "px-3" : "justify-center px-2"}`}>
         {isOpen && (
@@ -71,23 +101,21 @@ export default function Sidebar() {
             isOpen ? "ml-auto" : ""
           }`}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-            <rect x="3" y="4" width="18" height="16" rx="2" />
-            <path d="M9 4v16" />
-          </svg>
+          <SidebarLogo />
         </button>
       </div>
 
       {/* Nav */}
       <nav className="space-y-1 px-3">
         {navItems.map((item) => {
-          const isActive = item.label === active;
+          const isActive = isNavItemActive(pathname, item.href);
           return (
-            <button
+            <Link
               key={item.label}
-              onClick={() => setActive(item.label)}
+              href={item.href}
               title={!isOpen ? item.label : undefined}
               aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
               className={`cursor-pointer flex w-full items-center gap-3 rounded-lg py-2 text-sm font-medium transition-colors ${
                 isOpen ? "px-3" : "justify-center px-0"
               } ${
@@ -98,7 +126,7 @@ export default function Sidebar() {
             >
               {item.icon}
               {isOpen && item.label}
-            </button>
+            </Link>
           );
         })}
       </nav>
@@ -137,7 +165,7 @@ export default function Sidebar() {
               <p className="truncate text-xs text-zinc-500">0 Projects</p>
             </div>
           )}
-        </div>
+        </div> 
       </div>
     </div>
   );
