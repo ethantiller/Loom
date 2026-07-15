@@ -12,7 +12,7 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    titleBarStyle: "hidden",
+    titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
     trafficLightPosition: { x: 16, y: 13 },
     roundedCorners: true,
     webPreferences: {
