@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.routes import ingest, query
 from app.config import get_settings
 
 
@@ -12,3 +13,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Loom", lifespan=lifespan)
+
+app.include_router(ingest.router)
+app.include_router(query.router)

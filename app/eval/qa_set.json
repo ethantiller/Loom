@@ -1,0 +1,50 @@
+[
+  {
+    "question": "Who founded the company that Nadia Cole joined before starting Lumen Health?",
+    "expected_answer": "Priya Raman founded Halcyon Labs, the AI research company where Nadia Cole worked as a researcher before founding Lumen Health.",
+    "expected_hops": 2,
+    "gold_entities": ["Nadia Cole", "Halcyon Labs", "Priya Raman"]
+  },
+  {
+    "question": "Which venture firm invested in the company that acquired Vantage Analytics?",
+    "expected_answer": "Ashby Capital invested in Meridian Robotics, the company that acquired Vantage Analytics in 2019.",
+    "expected_hops": 2,
+    "gold_entities": ["Vantage Analytics", "Meridian Robotics", "Ashby Capital"]
+  },
+  {
+    "question": "What chip powers the product made by the company that Owen Castellano founded after leaving Nimbus Systems?",
+    "expected_answer": "The Photon chip, made by Beacon Semiconductor, powers the Atlas Arm made by Meridian Robotics, which Owen Castellano founded after leaving Nimbus Systems.",
+    "expected_hops": 3,
+    "gold_entities": ["Owen Castellano", "Meridian Robotics", "Atlas Arm", "Photon chip", "Beacon Semiconductor"]
+  },
+  {
+    "question": "Who became CTO of Nimbus Systems after Nimbus acquired his company?",
+    "expected_answer": "Marcus Feld became CTO of Nimbus Systems after Nimbus acquired Quill, the productivity company Feld had founded.",
+    "expected_hops": 2,
+    "gold_entities": ["Marcus Feld", "Quill", "Nimbus Systems"]
+  },
+  {
+    "question": "Which company did the founder of Pinnacle Security previously work at, and who ran that company?",
+    "expected_answer": "Grace Okoye, who founded Pinnacle Security, previously worked at Beacon Semiconductor, which was founded and is run by Leon Ashby.",
+    "expected_hops": 2,
+    "gold_entities": ["Grace Okoye", "Pinnacle Security", "Beacon Semiconductor", "Leon Ashby"]
+  },
+  {
+    "question": "Which AI model does Lumen Health license, and who created it?",
+    "expected_answer": "Lumen Health licenses the Oracle Engine, a large language model created by Halcyon Labs, which was founded by Priya Raman.",
+    "expected_hops": 2,
+    "gold_entities": ["Lumen Health", "Oracle Engine", "Halcyon Labs", "Priya Raman"]
+  },
+  {
+    "question": "Who led Meridian Robotics when it acquired Vantage Analytics, and where had that person previously worked?",
+    "expected_answer": "Ravi Anand led Meridian Robotics when it acquired Vantage Analytics in 2019. Anand had previously worked at Vantage Analytics itself.",
+    "expected_hops": 2,
+    "gold_entities": ["Ravi Anand", "Meridian Robotics", "Vantage Analytics"]
+  },
+  {
+    "question": "Which streaming company runs its infrastructure on the platform built by Priya Raman's first company?",
+    "expected_answer": "Aperture Media, the documentary streaming company founded by Sofia Marchetti, runs its video delivery infrastructure on Stratus, the platform built by Nimbus Systems, which Priya Raman co-founded.",
+    "expected_hops": 2,
+    "gold_entities": ["Aperture Media", "Stratus", "Nimbus Systems", "Priya Raman"]
+  }
+]
