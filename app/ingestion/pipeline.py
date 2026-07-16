@@ -1,6 +1,6 @@
 import hashlib
 from pathlib import Path
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -17,7 +17,20 @@ class IngestionPipeline:
         self.session = session
         self.settings = get_settings()
 
-    def run(self, source_dir: Path) -> list[DocumentRow]:
+    def run(
+        self,
+        source_dir: Path,
+        preassigned_ids: dict[str, UUID] | None = None,
+    ) -> list[DocumentRow]:
+        """Ingest every file in ``source_dir`` into Documents + Chunks.
+
+        ``preassigned_ids`` optionally maps a file's ``content_hash`` to the
+        ``Document.id`` it should be persisted under. This lets a caller (e.g. the
+        ``/ingest`` endpoint) mint ids up front and return them before ingestion
+        completes. When a hash is absent from the map — or the argument is omitted —
+        a fresh ``uuid4()`` is used, so existing callers are unaffected.
+        """
+        preassigned_ids = preassigned_ids or {}
         ingested: list[DocumentRow] = []
 
         for path in sorted(source_dir.iterdir()):
@@ -38,7 +51,7 @@ class IngestionPipeline:
             embeddings = embed([chunk.text for chunk in chunks])
 
             doc = DocumentRow(
-                id=uuid4(),
+                id=preassigned_ids.get(content_hash, uuid4()),
                 source_path=str(path),
                 content_hash=content_hash,
                 title=raw_doc.title,

@@ -1,4 +1,4 @@
-.PHONY: db-up db-down db-logs migrate migrate-down test dev
+.PHONY: db-up db-down db-logs migrate migrate-down test dev seed eval
 
 db-up:
 	docker compose up -d
@@ -20,3 +20,9 @@ test:
 
 dev:
 	uv sync && PYTHONPATH=.. uv run uvicorn app.main:app --reload
+
+seed:
+	PYTHONPATH=.. uv run python -m app.scripts.seed_corpus
+
+eval:
+	PYTHONPATH=.. uv run python -m app.eval.run_eval
