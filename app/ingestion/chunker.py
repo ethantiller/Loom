@@ -24,6 +24,17 @@ def _get_tokenizer() -> PreTrainedTokenizerBase:
     return AutoTokenizer.from_pretrained(model_name)
 
 
+def count_tokens(text: str) -> int:
+    """Number of tokens in ``text`` per the embedding model's tokenizer.
+
+    Uses the same settings as chunking (``add_special_tokens=False``) so counts
+    are consistent with the ``token_count`` stored on each persisted chunk.
+    """
+    return len(
+        _get_tokenizer()(text, add_special_tokens=False, return_attention_mask=False)["input_ids"]
+    )
+
+
 def chunk_document(
     doc: RawDocument, # the raw document to be chunked
     chunk_size: int, # the maximum number of tokens in each chunk

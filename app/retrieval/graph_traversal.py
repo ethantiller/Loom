@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.extraction.db.models import EntityMention
-from app.ingestion.chunker import _get_tokenizer
+from app.ingestion.chunker import count_tokens
 
 
 def find_seed_entities(chunk_id: UUID, session: Session) -> list[UUID]:
@@ -57,7 +57,6 @@ def subgraph_to_context(
     if token_budget is None:
         token_budget = get_settings().max_context_tokens
 
-    tokenizer = _get_tokenizer()
     seen: set[str] = set()
     lines: list[str] = []
     for src, tgt, data in subgraph.edges(data=True):
@@ -69,10 +68,7 @@ def subgraph_to_context(
         seen.add(line)
 
         candidate = "\n".join(lines + [line])
-        token_count = len(
-            tokenizer(candidate, add_special_tokens=False, return_attention_mask=False)["input_ids"]
-        )
-        if token_count > token_budget:
+        if count_tokens(candidate) > token_budget:
             break
         lines.append(line)
 
