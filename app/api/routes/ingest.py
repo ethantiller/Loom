@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-ACCEPTED_SUFFIXES = {".pdf", ".txt"}
+ACCEPTED_SUFFIXES = {".pdf", ".txt", ".md"}
 
 
 def _unique_dest(tmp_dir: Path, name: str) -> Path:

@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "d3": "^7.9.0",
     "electron-serve": "^3.0.1",
     "next": "16.2.10",
     "react": "19.2.4",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/d3": "^7.4.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

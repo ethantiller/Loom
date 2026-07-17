@@ -2,13 +2,34 @@ from datetime import datetime
 from uuid import UUID, uuid4
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, func
+from sqlalchemy import Column, DateTime, ForeignKey, Index, Integer, String, Table, Text, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
     pass
+
+
+# Many-to-many association: Project <-> Document
+project_document = Table(
+    "project_documents",
+    Base.metadata,
+    Column("project_id", PG_UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), primary_key=True),
+    Column("document_id", PG_UUID(as_uuid=True), ForeignKey("documents.id", ondelete="CASCADE"), primary_key=True),
+)
+
+
+class Project(Base):
+    __tablename__ = "projects"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    documents: Mapped[list["Document"]] = relationship(
+        "Document", secondary=project_document, back_populates="projects"
+    )
 
 
 class Document(Base):
@@ -22,6 +43,9 @@ class Document(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     chunks: Mapped[list["Chunk"]] = relationship("Chunk", back_populates="document", cascade="all, delete-orphan")
+    projects: Mapped[list["Project"]] = relationship(
+        "Project", secondary=project_document, back_populates="documents"
+    )
 
 
 class Chunk(Base):
@@ -88,4 +112,4 @@ class EntityMention(Base):
     )
 
     entity: Mapped["Entity"] = relationship("Entity", back_populates="mentions")
-    chunk: Mapped["Chunk"] = relationship("Chunk", back_populates="entity_mentions")
+    chunk: Mapped[Chunk] = relationship("Chunk", back_populates="entity_mentions")
